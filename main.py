@@ -10,10 +10,11 @@ BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
+YELLOW = (0, 255, 255)
 
 # Spielkonstanten
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+SCREEN_WIDTH = 1400
+SCREEN_HEIGHT = 1000
 LANE_WIDTH = SCREEN_WIDTH // 6
 CAR_WIDTH = 60
 CAR_HEIGHT = 120
@@ -50,9 +51,9 @@ clock = pygame.time.Clock()
 class PlayerCar(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        #self.image = "assets/images/player_car.png"
-        self.image = pygame.Surface((CAR_WIDTH, CAR_HEIGHT))
-        self.image.fill(GREEN)
+        
+        self.image = pygame.image.load("assets/images/main_car.png").convert()
+        self.image = pygame.transform.scale(self.image, (100, 180))
         self.rect = self.image.get_rect()
         self.rect.centerx = SCREEN_WIDTH // 2
         self.rect.bottom = SCREEN_HEIGHT - 10
@@ -63,13 +64,18 @@ class PlayerCar(pygame.sprite.Sprite):
             self.rect.x -= self.speed
         if keys[K_RIGHT] and self.rect.right < SCREEN_WIDTH:
             self.rect.x += self.speed
+        if keys[K_UP] and self.rect.top < SCREEN_HEIGHT:
+            self.rect.y -= self.speed
+        if keys[K_DOWN] and self.rect.bottom > 0:
+            self.rect.y += self.speed
 
 # Gegner-Auto-Klasse
 class EnemyCar(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.Surface((CAR_WIDTH, CAR_HEIGHT))
-        self.image.fill(RED)
+        
+        self.image = pygame.image.load("assets/images/enemy_car.png").convert()
+        self.image = pygame.transform.scale(self.image, (100, 180))
         self.rect = self.image.get_rect()
         self.rect.x = random.choice([i * LANE_WIDTH for i in range(6)])
         self.rect.y = -CAR_HEIGHT
@@ -84,8 +90,9 @@ class EnemyCar(pygame.sprite.Sprite):
 class Coin(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.Surface((30, 30))
-        self.image.fill(YELLOW)
+
+        self.image = pygame.image.load("assets/images/coin.png").convert()
+        self.image = pygame.transform.scale(self.image, (40, 40))
         self.rect = self.image.get_rect()
         self.rect.x = random.choice([i * LANE_WIDTH for i in range(6)])
         self.rect.y = random.randint(0, SCREEN_HEIGHT // 2)
