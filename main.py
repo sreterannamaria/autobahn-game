@@ -29,6 +29,10 @@ LEVELS = [
     # Weitere Levels können hier hinzugefügt werden
 ]
 
+GAME_STATE = "start-menu"
+
+
+
 # Initialisiere pygame
 pygame.init()
 
@@ -109,9 +113,19 @@ def draw_status(screen, score, level, time_left):
     screen.blit(level_text, (10, 50))
     screen.blit(timer_text, (10, 90))
 
+# Funktion, um das Startmenu darzustellen
+def draw_start_menu():
+    screen.fill((0, 0, 0))
+    font = pygame.font.SysFont('arial', 40)
+    title = font.render('My Game', True, (155, 255, 255))
+    start_button = font.render('(space) Start', True, (255, 255, 255))
+    screen.blit(title, (SCREEN_WIDTH/2 - title.get_width()/2, SCREEN_HEIGHT/2 - title.get_height()/2))
+    screen.blit(start_button, (SCREEN_WIDTH/2 - start_button.get_width()/2, SCREEN_HEIGHT/2 + start_button.get_height()/2))
+    pygame.display.update()
+
 # Hauptspiel-Funktion
 def main_game():
-    global level, level_timer, score
+    global level, level_timer, score, GAME_STATE
     player = PlayerCar()
     player_group = pygame.sprite.Group(player)
     enemy_group = pygame.sprite.Group()
@@ -128,55 +142,66 @@ def main_game():
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
-        
-        keys = pygame.key.get_pressed()
-        player.update(keys)
-        
-        # Autos generieren
-        enemy_timer += 1
-        if enemy_timer >= LEVELS[level]['car_frequency']:
-            enemy_car = EnemyCar()
-            enemy_group.add(enemy_car)
-            enemy_timer = 0
-        
-        # Münzen generieren
-        coin_timer += 1
-        if coin_timer >= 300:  # alle 5 Sekunden
-            coin = Coin()
-            coin_group.add(coin)
-            coin_timer = 0
 
-        # Aktualisiere Gegner und Münzen
-        enemy_group.update()
-        coin_group.update()
+        if GAME_STATE == "start-menu":
+            draw_start_menu()
 
-        # Kollisionen prüfen
-        if pygame.sprite.spritecollide(player, enemy_group, True):
-            score -= 10  # Punkteabzug bei Kollision
-        if pygame.sprite.spritecollide(player, coin_group, True):
-            score += 10  # Punkte für das Einsammeln einer Münze
-        
-        # Bildschirm aktualisieren
-        screen.fill(BLACK)
-        player_group.draw(screen)
-        enemy_group.draw(screen)
-        coin_group.draw(screen)
-        
-        # Timer und Level berechnen
-        game_timer += 1
-        time_left = max(0, level_timer - game_timer // FPS)
-        if time_left == 0:
-            game_timer = 0
-            level += 1
-            if level >= len(LEVELS):
-                level = len(LEVELS) - 1  # Maximallevel
-            level_timer = 60  # Zurücksetzen des Level-Timers
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_SPACE]:
+                GAME_STATE = "game"
 
-        # Statusleiste anzeigen
-        draw_status(screen, score, level, time_left)
+        if GAME_STATE == "game":        
+            keys = pygame.key.get_pressed()
+            player.update(keys)
 
-        pygame.display.flip()
-        clock.tick(FPS)
+            if keys[pygame.K_ESCAPE]:
+                GAME_STATE = "start-menu"
+            
+            # Autos generieren
+            enemy_timer += 1
+            if enemy_timer >= LEVELS[level]['car_frequency']:
+                enemy_car = EnemyCar()
+                enemy_group.add(enemy_car)
+                enemy_timer = 0
+            
+            # Münzen generieren
+            coin_timer += 1
+            if coin_timer >= 300:  # alle 5 Sekunden
+                coin = Coin()
+                coin_group.add(coin)
+                coin_timer = 0
+
+            # Aktualisiere Gegner und Münzen
+            enemy_group.update()
+            coin_group.update()
+
+            # Kollisionen prüfen
+            if pygame.sprite.spritecollide(player, enemy_group, True):
+                score -= 10  # Punkteabzug bei Kollision
+            if pygame.sprite.spritecollide(player, coin_group, True):
+                score += 10  # Punkte für das Einsammeln einer Münze
+            
+            # Bildschirm aktualisieren
+            screen.fill(BLACK)
+            player_group.draw(screen)
+            enemy_group.draw(screen)
+            coin_group.draw(screen)
+            
+            # Timer und Level berechnen
+            game_timer += 1
+            time_left = max(0, level_timer - game_timer // FPS)
+            if time_left == 0:
+                game_timer = 0
+                level += 1
+                if level >= len(LEVELS):
+                    level = len(LEVELS) - 1  # Maximallevel
+                level_timer = 60  # Zurücksetzen des Level-Timers
+
+            # Statusleiste anzeigen
+            draw_status(screen, score, level, time_left)
+
+            pygame.display.flip()
+            clock.tick(FPS)
 
 if __name__ == "__main__":
     main_game()
