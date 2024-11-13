@@ -204,5 +204,5 @@ def main_game():
             clock.tick(FPS)
 
 if __name__ == "__main__":
-    print("new branch")
+    
     main_game()
