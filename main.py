@@ -4,13 +4,22 @@ import random
 import sys
 from pygame.locals import *
 
+# Initialisiere pygame
+pygame.init()
+
+# Bildschirm und Fenstergröße
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
 # Farben
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
-YELLOW = (0, 255, 255)
+ROAD_COLOR = (50, 50, 50)
+LINE_COLOR = (255, 255, 255)
+
 
 # Spielkonstanten
 SCREEN_WIDTH = 1400
@@ -33,8 +42,7 @@ GAME_STATE = "start-menu"
 
 
 
-# Initialisiere pygame
-pygame.init()
+
 
 # Setze das Fenster
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
