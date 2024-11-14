@@ -4,17 +4,34 @@ import random
 import sys
 from pygame.locals import *
 
+# Initialisiere pygame
+pygame.init()
+
+# Bildschirm und Fenstergröße
+SCREEN_WIDTH = 1400
+SCREEN_HEIGHT = 1000
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("Autobahnspiel")
+
 # Farben
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
-YELLOW = (0, 255, 255)
+ROAD_COLOR = (50, 50, 50)
+LINE_COLOR = (255, 255, 255)
+
+# Schriften und Hintergrundbild
+font = pygame.font.SysFont(None, 36)
+background_image = pygame.image.load('background.jpg')
+
+# Sounds
+coin_sound = pygame.mixer.Sound('coin.wav')
+collision_sound = pygame.mixer.Sound('collision.wav')
+level_up_sound = pygame.mixer.Sound('level_up.wav')
+pygame.mixer.music.load('background_music.mp3')
 
 # Spielkonstanten
-SCREEN_WIDTH = 1400
-SCREEN_HEIGHT = 1000
 LANE_WIDTH = SCREEN_WIDTH // 6
 CAR_WIDTH = 60
 CAR_HEIGHT = 120
@@ -30,18 +47,6 @@ LEVELS = [
 ]
 
 GAME_STATE = "start-menu"
-
-
-
-# Initialisiere pygame
-pygame.init()
-
-# Setze das Fenster
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Autobahnspiel")
-
-# Schriftart für die Anzeige
-font = pygame.font.SysFont(None, 36)
 
 # Zeit und Level
 level = 0
