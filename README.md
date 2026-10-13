@@ -57,7 +57,7 @@ The game logic is separate from the rendering, so the tests run without a window
 
 ## Context
 
-A team project in the **Software Engineering** module (autumn semester 2024), developed with Git in a team of two (Annamária Sréter and [@Andrin88](https://github.com/Andrin88)).
+A team project in the **Software Engineering** module (autumn semester 2024), developed with Git as a team: Annamária Sréter, [@Andrin88](https://github.com/Andrin88) and [@Memichael94](https://github.com/Memichael94).
 
 ## License
 
